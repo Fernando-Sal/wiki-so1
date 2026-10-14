@@ -30,7 +30,7 @@ const config = {
 
   trailingSlash: false,
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -90,7 +90,7 @@ const config = {
         label: 'Contenido',
       },
       {
-        href: 'https://github.com/TU_USUARIO/wiki-so1',
+        href: 'https://github.com/Fernando-Sal/wiki-so1',
         label: 'GitHub',
         position: 'right',
       },
