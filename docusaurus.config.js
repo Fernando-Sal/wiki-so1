@@ -63,21 +63,7 @@ const config = {
           editUrl:
             'https://github.com/Fernando-Sal/wiki-so1/tree/main/',
         },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/Fernando-Sal/wiki-so1/tree/main/',
-          // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
+        blog: false,
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -93,41 +79,28 @@ const config = {
       colorMode: {
         respectPrefersColorScheme: true,
       },
-      navbar: {
-        title: 'Wiki de Sistemas Operativos 1',
-        logo: {
-          alt: 'My Site Logo',
-          src: 'img/logo.svg',
-        },
-        items: [
-          {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
-            position: 'left',
-            label: 'Documentación',
-          },
-          {
-            href: 'https://github.com/Fernando-Sal/wiki-so1',
-            label: 'GitHub',
-            position: 'right',
-          },
-        ],
+      themeConfig: {
+  navbar: {
+    title: 'SO1 Wiki',
+    items: [
+      {
+        type: 'docSidebar',
+        sidebarId: 'tutorialSidebar',
+        position: 'left',
+        label: 'Contenido',
       },
-      footer: {
-        style: 'dark',
-        links: [
-          {
-            title: 'Docs',
-            items: [
-              {
-                label: 'Documentación',
-                to: '/docs/intro',
-              },
-            ],
-          },
-        ],
-        copyright: `Copyright © ${new Date().getFullYear()} Wiki de Sistemas Operativos 1.`,
+      {
+        href: 'https://github.com/TU_USUARIO/wiki-so1',
+        label: 'GitHub',
+        position: 'right',
       },
+    ],
+  },
+    footer: {
+      style: 'dark',
+      copyright: `Wiki de Sistemas Operativos 1 · ${new Date().getFullYear()}`,
+      },
+    },
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
