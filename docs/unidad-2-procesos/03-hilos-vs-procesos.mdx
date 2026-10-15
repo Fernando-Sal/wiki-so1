@@ -1,0 +1,106 @@
+---
+sidebar_position: 3
+title: Hilos frente a Procesos
+---
+
+import SimuladorHilos from '@site/src/components/SimuladorHilos';
+
+**Idea central:** Un proceso es como un restaurante completo (con su propia cocina, baños y mesas), mientras que un hilo es como un mesero trabajando dentro de ese restaurante. Abrir un restaurante nuevo es carísimo y no comparte nada con el de al lado; contratar un mesero nuevo es barato y todos comparten la misma cocina.
+
+### ¿Qué se comparte y qué no?
+
+Cuando un proceso decide crear un "hilo" (thread) en lugar de crear un clon de sí mismo, ocurre algo especial[cite: 12]: el nuevo hilo vive dentro del mismo espacio de memoria que su creador.
+
+**Lo que SÍ comparten todos los hilos del mismo proceso:**
+* **El código (Texto):** Las instrucciones del programa.
+* **Los datos:** Las variables globales. Si un hilo cambia una variable, el otro hilo ve el cambio de inmediato[cite: 12].
+* **Archivos abiertos:** Si el programa abre un archivo de texto, todos los hilos pueden escribir en él.
+
+**Lo que NO comparten (cada hilo tiene el suyo propio):**
+* **Los registros de la CPU:** Porque cada hilo puede estar ejecutando una línea de código diferente en ese milisegundo[cite: 12].
+* **La Pila (Stack):** Sus variables locales temporales y el historial de las funciones que ha llamado[cite: 12].
+
+### Cuadro Comparativo
+
+| Característica | Procesos | Hilos |
+| :--- | :--- | :--- |
+| **Creación** | Muy pesada y lenta (requiere copiar toda la memoria). | Muy ligera y rápida (solo se crea una pila y registros)[cite: 12]. |
+| **Comunicación** | Difícil. Requiere herramientas complejas del SO (tuberías, memoria compartida). | Fácil. Se comunican leyendo y escribiendo las mismas variables globales[cite: 12]. |
+| **Aislamiento** | Alto. Si un proceso falla, no afecta a los demás[cite: 12]. | Nulo. Si un hilo comete un error fatal (como tocar memoria prohibida), todo el proceso muere[cite: 12]. |
+| **Memoria** | Tienen espacios de memoria totalmente separados e independientes[cite: 12]. | Comparten el mismo espacio de memoria (código y datos globales)[cite: 12]. |
+| **Cambio de Contexto** | Costoso. Hay que guardar y cargar mucha información en el PCB[cite: 12]. | Barato y rápido. Solo se guardan los registros y la pila[cite: 12]. |
+
+### Contrastando Código en C: `pthread` vs `fork()`
+
+Para entender la diferencia de aislamiento, veamos dos programas intentando hacer lo mismo: sumar dinero a una variable global.
+
+#### 1. Usando Hilos (`pthread_create`)
+*Se compila en Linux usando: `gcc hilos.c -o hilos -pthread`*[cite: 12]
+
+```c
+#include <stdio.h>
+#include <pthread.h>
+
+int saldo = 100; // Variable GLOBAL, compartida por todos los hilos
+
+void* depositar(void* arg) {
+    saldo = saldo + 50; 
+    printf("Hilo depositando... Saldo actual: %d\n", saldo);
+    return NULL;
+}
+
+int main() {
+    pthread_t hilo1, hilo2;
+    
+    // Creamos dos meseros (hilos) en el mismo restaurante
+    pthread_create(&hilo1, NULL, depositar, NULL);
+    pthread_create(&hilo2, NULL, depositar, NULL);
+    
+    // Esperamos a que terminen
+    pthread_join(hilo1, NULL);
+    pthread_join(hilo2, NULL);
+    
+    // El resultado final será 200, porque ambos modificaron la MISMA variable
+    return 0;
+}
+```
+
+#### 2. Usando Procesos (`fork`)
+
+```c
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+int saldo = 100; // Variable GLOBAL
+
+int main() {
+    // Creamos un clon del programa (un restaurante idéntico en otra calle)
+    pid_t pid = fork();
+
+    if (pid == 0) {
+        // Código del Proceso HIJO
+        saldo = saldo + 50;
+        printf("Hijo depositando... Mi saldo: %d\n", saldo);
+    } else {
+        // Código del Proceso PADRE
+        saldo = saldo + 50;
+        printf("Padre depositando... Mi saldo: %d\n", saldo);
+        wait(NULL); // Esperamos al hijo
+    }
+    
+    // El resultado final NUNCA es 200. El padre tendrá 150 y el hijo tendrá 150.
+    // Al hacer fork(), la variable 'saldo' se CLONÓ, no se compartió.
+    return 0;
+}
+```
+
+### Simulador: El problema de la memoria
+
+Usa estos botones para ejecutar virtualmente los códigos de arriba. Observa cómo los hilos logran llegar a 200 porque trabajan en equipo sobre el mismo archivo de memoria, mientras que los procesos, al estar aislados para su propia seguridad, modifican copias distintas.
+
+<SimuladorHilos />
+
+### Puntos Clave
+* Si necesitas hacer 10 tareas a la vez que requieren procesar los mismos datos masivos, usa **Hilos**, porque compartirán la RAM y no desperdiciarás espacio.
+* Si necesitas correr 10 tareas peligrosas o de usuarios distintos (como las pestañas de Google Chrome), usa **Procesos**, porque si una pestaña falla, el aislamiento evitará que todo tu navegador se cierre de golpe.

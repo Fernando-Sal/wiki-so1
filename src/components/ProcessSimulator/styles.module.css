@@ -1,0 +1,9 @@
+.contenedor {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  padding: 1rem;
+  background: var(--ifm-background-surface-color);
+  margin: 1.5rem 0;
+}
+.botones { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0; }
+.estado { color: var(--ifm-color-primary); font-size: 1.3rem; font-weight: bold; }
