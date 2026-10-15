@@ -74,33 +74,30 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       colorMode: {
         respectPrefersColorScheme: true,
       },
-      themeConfig: {
-  navbar: {
-    title: 'SO1 Wiki',
-    items: [
-      {
-        type: 'docSidebar',
-        sidebarId: 'tutorialSidebar',
-        position: 'left',
-        label: 'Contenido',
+      navbar: {
+        title: 'SO1 Wiki',
+        items: [
+          {
+            type: 'docSidebar',
+            sidebarId: 'tutorialSidebar',
+            position: 'left',
+            label: 'Contenido',
+          },
+          {
+            href: 'https://github.com/Fernando-Sal/wiki-so1',
+            label: 'GitHub',
+            position: 'right',
+          },
+        ],
       },
-      {
-        href: 'https://github.com/Fernando-Sal/wiki-so1',
-        label: 'GitHub',
-        position: 'right',
+      footer: {
+        style: 'dark',
+        copyright: `Wiki de Sistemas Operativos 1 · ${new Date().getFullYear()}`,
       },
-    ],
-  },
-    footer: {
-      style: 'dark',
-      copyright: `Wiki de Sistemas Operativos 1 · ${new Date().getFullYear()}`,
-      },
-    },
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
