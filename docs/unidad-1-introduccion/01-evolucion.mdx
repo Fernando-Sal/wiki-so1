@@ -1,0 +1,40 @@
+---
+sidebar_position: 1
+title: Evolución de los sistemas operativos
+---
+
+import SimuladorLotes from '@site/src/components/SimuladorLotes';
+
+**Idea central:** La evolución de los sistemas operativos trata sobre cómo pasamos de interactuar con máquinas mediante tarjetas perforadas a tener computadoras portátiles ultra rápidas, todo por la necesidad de automatizar tareas y no desperdiciar el valioso tiempo del procesador.
+
+### Desarrollo Histórico
+
+Todo empezó con el **procesamiento por lotes**. Antes, un humano tenía que meter los trabajos a la máquina uno por uno. Esto era lentísimo y el procesador pasaba mucho tiempo inactivo. Para arreglarlo, los sistemas por lotes automatizaron la transición de un trabajo a otro sin intervención humana.
+
+Pero el procesador seguía siendo más rápido que las lectoras de tarjetas. La solución fue la **multiprogramación**: meter varios programas en la memoria al mismo tiempo. Así, si un programa se quedaba esperando a leer un dato, el procesador se ponía a trabajar en otro diferente en lugar de detenerse. 
+
+El problema ahora era que el usuario no interactuaba con su programa mientras se ejecutaba. Así nació el **tiempo compartido**, donde el sistema operativo divide milisegundos de su tiempo entre múltiples usuarios, dando la ilusión de que todos tienen la computadora para ellos solos. Esta miniaturización y abaratamiento de los recursos abrió la puerta a las **computadoras personales** (un usuario por máquina), luego a los **sistemas distribuidos** (muchas computadoras en red simulando ser una sola súper máquina), y finalmente a los **sistemas móviles**, que adaptaron todo este poder a baterías y pantallas pequeñas.
+
+<SimuladorLotes />
+
+### Cuadro Comparativo
+
+| Generación | Época | Problema que resolvió | Limitación principal |
+| :--- | :--- | :--- | :--- |
+| **Lotes** | 1950s | Evitó que el humano tuviera que meter trabajos manualmente uno por uno. | El procesador se quedaba inactivo mucho tiempo esperando la lectura de datos. |
+| **Multiprogramación** | 1960s | Evitó el tiempo ocioso del procesador metiendo varios programas a memoria. | Los usuarios no podían interactuar en tiempo real con sus programas. |
+| **Tiempo Compartido** | 1970s | Permitió a muchos usuarios interactuar al mismo tiempo con la máquina. | Era muy complejo de gestionar y requería hardware costoso. |
+| **Computadoras Personales** | 1980s | Acercó la computación al hogar, ya no solo a grandes universidades o empresas. | Al inicio, tenían muy pocos recursos y poca seguridad comparado a un mainframe. |
+| **Distribuidos / Móviles** | 1990s - Hoy | Solucionó los cuellos de botella de una sola máquina uniéndolas en red y permitió portabilidad. | Dependencia de las conexiones de red y de la duración de la batería. |
+
+### Línea de tiempo
+
+```mermaid
+timeline
+    title Evolución de los SO
+    Lotes : Los trabajos se ejecutan uno tras otro
+    Multiprogramación : Varios programas en memoria
+    Tiempo Compartido : Interacción simultánea de usuarios
+    Personales : Uso dedicado y doméstico
+    Distribuidos : Equipos en red actuando como uno
+    Móviles : Computación de bolsillo
