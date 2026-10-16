@@ -16,7 +16,7 @@
 Requisitos: Node.js >= 20 y Git.
 
 ```bash
-git clone git@github.com:Fernando-Sal/wiki-so1.git
+git clone git@github.com:Fernando-Salgit/wiki-so1.git
 cd wiki-so1
 npm ci
 npm start        # servidor de desarrollo en localhost:3000
