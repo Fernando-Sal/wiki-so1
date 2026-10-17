@@ -15,24 +15,24 @@ Para entenderlo fácilmente, imagina que tu computadora es un avión. El **Modo 
 
 ### Los 3 Mecanismos de Protección
 
-El sistema operativo es desconfiado por naturaleza y usa tres muros de seguridad para mantener el orden[cite: 8]:
+El sistema operativo es desconfiado por naturaleza y usa tres muros de seguridad para mantener el orden:
 
-1. **Protección de Memoria:** Es como ponerle bardas a los terrenos. El sistema se asegura de que el programa A no pueda asomarse ni escribir en la porción de memoria RAM que le pertenece al programa B, y mucho menos en la memoria del Kernel[cite: 8].
-2. **Protección de CPU (Temporizador):** Evita que un programa egoísta acapare todo el procesador. El sistema le pone un "cronómetro" (temporizador) a cada programa[cite: 8]. Si el tiempo se acaba, el procesador le quita el control a la fuerza y se lo pasa a otro programa. Así la compu no se congela por completo si una app se traba.
-3. **Protección de Entrada/Salida (E/S):** Ningún programa puede hablar directamente con la pantalla, el teclado o el disco duro. Todo acceso a estos periféricos requiere permisos y se debe pedir "por favor" a través del Kernel[cite: 8].
+1. **Protección de Memoria:** Es como ponerle bardas a los terrenos. El sistema se asegura de que el programa A no pueda asomarse ni escribir en la porción de memoria RAM que le pertenece al programa B, y mucho menos en la memoria del Kernel.
+2. **Protección de CPU (Temporizador):** Evita que un programa egoísta acapare todo el procesador. El sistema le pone un "cronómetro" (temporizador) a cada programa. Si el tiempo se acaba, el procesador le quita el control a la fuerza y se lo pasa a otro programa. Así la compu no se congela por completo si una app se traba.
+3. **Protección de Entrada/Salida (E/S):** Ningún programa puede hablar directamente con la pantalla, el teclado o el disco duro. Todo acceso a estos periféricos requiere permisos y se debe pedir "por favor" a través del Kernel.
 
 ### Cuadro Comparativo
 
 | Característica | Modo Usuario (Bit 1) | Modo Kernel (Bit 0) |
 | :--- | :--- | :--- |
-| **Nivel de Acceso** | Restringido. No puede tocar el hardware[cite: 8]. | Total y absoluto. Controla todos los recursos del equipo[cite: 8]. |
-| **Instrucciones** | Solo instrucciones seguras y matemáticas básicas[cite: 8]. | Puede ejecutar **instrucciones privilegiadas**[cite: 8]. |
-| **¿Quién corre aquí?** | Navegadores, juegos, editores de texto, tus scripts[cite: 8]. | El núcleo del Sistema Operativo y los drivers[cite: 8]. |
-| **¿Qué pasa si falla?** | La aplicación se cierra o da error, pero la compu sigue viva[cite: 8]. | Toda la computadora colapsa (Pantallazo Azul en Windows o Kernel Panic en Linux)[cite: 8]. |
+| **Nivel de Acceso** | Restringido. No puede tocar el hardware. | Total y absoluto. Controla todos los recursos del equipo. |
+| **Instrucciones** | Solo instrucciones seguras y matemáticas básicas. | Puede ejecutar **instrucciones privilegiadas**. |
+| **¿Quién corre aquí?** | Navegadores, juegos, editores de texto, tus scripts. | El núcleo del Sistema Operativo y los drivers. |
+| **¿Qué pasa si falla?** | La aplicación se cierra o da error, pero la compu sigue viva. | Toda la computadora colapsa (Pantallazo Azul en Windows o Kernel Panic en Linux). |
 
 ### Diagrama de Estados: El viaje entre modos
 
-Este diagrama muestra cómo un programa salta de un modo a otro. Normalmente estás en modo usuario, pero si necesitas leer un archivo (System Call) o hay un error, el sistema salta al modo Kernel, hace el trabajo, y regresa[cite: 8].
+Este diagrama muestra cómo un programa salta de un modo a otro. Normalmente estás en modo usuario, pero si necesitas leer un archivo (System Call) o hay un error, el sistema salta al modo Kernel, hace el trabajo, y regresa.
 
 ```mermaid
 stateDiagram-v2

@@ -17,18 +17,18 @@ Para entenderlo sin tecnicismos, imagina que tienes una cuenta bancaria comparti
 5. Tu cajero guarda el nuevo saldo (Q150).
 6. El cajero de tu pareja guarda su nuevo saldo (Q150) y sobrescribe el tuyo.
 
-¡Perdieron Q50! Esto ocurrió porque el resultado dependió del orden en que se intercalaron las acciones[cite: 22]. A esto se le llama **Condición de Carrera**.
+¡Perdieron Q50! Esto ocurrió porque el resultado dependió del orden en que se intercalaron las acciones. A esto se le llama **Condición de Carrera**.
 
-Para evitar esto, usamos una **Sección Crítica**: un pedazo de código donde solo un hilo puede entrar a la vez (como ponerle un candado al cajero hasta que la primera persona termine por completo)[cite: 22].
+Para evitar esto, usamos una **Sección Crítica**: un pedazo de código donde solo un hilo puede entrar a la vez (como ponerle un candado al cajero hasta que la primera persona termine por completo).
 
-Una buena solución a este problema debe cumplir 3 requisitos[cite: 22]:
+Una buena solución a este problema debe cumplir 3 requisitos:
 1. **Exclusión Mutua:** Si el hilo A está en la sección crítica, el hilo B debe quedarse afuera esperando.
 2. **Progreso:** Si nadie está en la sección crítica, no se puede impedir injustamente que un hilo entre.
 3. **Espera Acotada:** Un hilo no puede quedarse esperando toda la vida; debe haber un límite de tiempo.
 
 ### El Experimento en C: Provocando el error
 
-Este código tiene dos hilos sumando 1 al mismo contador de forma simultánea, un millón de veces cada uno[cite: 22]. Lo lógico sería que al final tengamos 2,000,000.
+Este código tiene dos hilos sumando 1 al mismo contador de forma simultánea, un millón de veces cada uno. Lo lógico sería que al final tengamos 2,000,000.
 
 ```c
 #include <stdio.h>
@@ -56,14 +56,14 @@ int main(void) {
 
 ### Resultados Reales y Explicación
 
-Compilé esto en mi terminal Linux y lo ejecuté 5 veces. **Mis resultados reales fueron:**[cite: 23]
+Compilé esto en mi terminal Linux y lo ejecuté 5 veces. **Mis resultados reales fueron:**
 * Intento 1: 1,145,392
 * Intento 2: 1,089,104
 * Intento 3: 1,532,091
 * Intento 4: 1,999,823
 * Intento 5: 1,045,999
 
-¡Casi nunca da dos millones![cite: 23] ¿Por qué? Porque para nosotros `contador++` es una sola línea de código, pero para el procesador son tres pasos distintos (Instrucciones de Máquina)[cite: 23]:
+¡Casi nunca da dos millones! ¿Por qué? Porque para nosotros `contador++` es una sola línea de código, pero para el procesador son tres pasos distintos (Instrucciones de Máquina):
 1. **Leer** el valor de la memoria.
 2. **Sumarle** 1.
 3. **Escribir** el nuevo valor en la memoria.
@@ -72,7 +72,7 @@ Si el Sistema Operativo interrumpe al Hilo 1 justo después de "Leer", y mete al
 
 #### Diagrama de la colisión
 
-Aquí tienes la prueba de cómo se pierden datos si ambos hilos leen el número 5 al mismo tiempo[cite: 23]:
+Aquí tienes la prueba de cómo se pierden datos si ambos hilos leen el número 5 al mismo tiempo:
 
 ```mermaid
 sequenceDiagram
@@ -91,7 +91,7 @@ sequenceDiagram
 
 ### La Solución: Usando `pthread_mutex_t`
 
-Para arreglarlo, agregamos un candado (Mutex). Antes de sumar, el hilo pone el candado. Si el otro hilo llega, encuentra la puerta bloqueada y tiene que esperar a que el primero termine los 3 pasos (Leer, Sumar, Escribir)[cite: 23].
+Para arreglarlo, agregamos un candado (Mutex). Antes de sumar, el hilo pone el candado. Si el otro hilo llega, encuentra la puerta bloqueada y tiene que esperar a que el primero termine los 3 pasos (Leer, Sumar, Escribir).
 
 ```c
 #include <stdio.h>
@@ -132,5 +132,5 @@ Experimenta tú mismo la frustración de la condición de carrera y la efectivid
 <SimuladorCarrera />
 
 ### Puntos Clave
-* Una instrucción que parece atómica en C (`contador++`), en realidad está desarmada en varios pasos por el hardware[cite: 23].
+* Una instrucción que parece atómica en C (`contador++`), en realidad está desarmada en varios pasos por el hardware.
 * Un **Mutex** (Mutual Exclusion) funciona literalmente como la llave del baño de una gasolinera: el que tiene la llave entra y hace lo suyo. Los demás hacen fila hasta que devuelva la llave.

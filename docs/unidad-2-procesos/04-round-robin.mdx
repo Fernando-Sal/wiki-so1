@@ -9,12 +9,12 @@ import CalculadoraQuantum from '@site/src/components/CalculadoraQuantum';
 
 ### ¿Qué es el Quantum y el Dilema del tiempo?
 
-Imagina que estás con dos amigos y tienen una sola consola para jugar. Para que nadie se aburra, deciden que cada uno jugará exactamente 10 minutos y luego pasará el control al siguiente, haciendo una rueda infinita. Esos 10 minutos son el **Quantum**: la rebanada de tiempo máximo que un proceso puede usar el procesador de corrido[cite: 13].
+Imagina que estás con dos amigos y tienen una sola consola para jugar. Para que nadie se aburra, deciden que cada uno jugará exactamente 10 minutos y luego pasará el control al siguiente, haciendo una rueda infinita. Esos 10 minutos son el **Quantum**: la rebanada de tiempo máximo que un proceso puede usar el procesador de corrido.
 
-Configurar el tamaño de ese quantum es el mayor dolor de cabeza para los diseñadores de Sistemas Operativos por este dilema[cite: 13]:
+Configurar el tamaño de ese quantum es el mayor dolor de cabeza para los diseñadores de Sistemas Operativos por este dilema:
 
-1. **Si el quantum es muy pequeño:** (Ej. 1 minuto). Se cambian los turnos tan rápido que pasan más tiempo guardando y cargando partidas (Cambio de Contexto) que jugando de verdad. A esto se le llama **sobrecarga** o desperdicio de CPU[cite: 13].
-2. **Si el quantum es muy grande:** (Ej. 2 horas). La rueda gira tan lento que se convierte en un sistema *First Come, First Served* (FCFS)[cite: 13]. Si tu amigo agarra el control primero, te toca esperar horas para jugar, dando una **mala respuesta** al usuario[cite: 13].
+1. **Si el quantum es muy pequeño:** (Ej. 1 minuto). Se cambian los turnos tan rápido que pasan más tiempo guardando y cargando partidas (Cambio de Contexto) que jugando de verdad. A esto se le llama **sobrecarga** o desperdicio de CPU.
+2. **Si el quantum es muy grande:** (Ej. 2 horas). La rueda gira tan lento que se convierte en un sistema *First Come, First Served* (FCFS). Si tu amigo agarra el control primero, te toca esperar horas para jugar, dando una **mala respuesta** al usuario.
 
 ### Prueba el dilema en vivo
 
@@ -24,7 +24,7 @@ Usa esta calculadora para ver matemáticamente cómo un quantum muy corto arruin
 
 ### Ejercicio Resuelto: 3 Procesos (Quantum = 4)
 
-Vamos a simular matemáticamente cómo la CPU atiende a tres programas que llegan al mismo tiempo (en el milisegundo 0), con un **Quantum de 4 ms**[cite: 13].
+Vamos a simular matemáticamente cómo la CPU atiende a tres programas que llegan al mismo tiempo (en el milisegundo 0), con un **Quantum de 4 ms**.
 
 | Proceso | Tiempo de Ráfaga (Total necesario) |
 | :--- | :--- |
@@ -34,7 +34,7 @@ Vamos a simular matemáticamente cómo la CPU atiende a tres programas que llega
 
 #### Diagrama de Gantt (Línea de ejecución)
 
-El procesador atiende máximo 4 ms a cada uno. Si el proceso necesita menos, suelta la CPU temprano; si necesita más, se va al final de la fila[cite: 13].
+El procesador atiende máximo 4 ms a cada uno. Si el proceso necesita menos, suelta la CPU temprano; si necesita más, se va al final de la fila.
 
 ```mermaid
 gantt

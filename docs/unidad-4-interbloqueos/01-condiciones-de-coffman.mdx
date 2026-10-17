@@ -9,22 +9,22 @@ import SimuladorDeadlock from '@site/src/components/SimuladorDeadlock';
 
 ### Las 4 Condiciones Simultáneas de Coffman
 
-Para que ocurra un interbloqueo, Edward G. Coffman demostró que **deben cumplirse estas cuatro condiciones al mismo tiempo**[cite: 23]. Si logramos romper al menos una, el deadlock es imposible.
+Para que ocurra un interbloqueo, Edward G. Coffman demostró que **deben cumplirse estas cuatro condiciones al mismo tiempo**. Si logramos romper al menos una, el deadlock es imposible.
 
-Analicemos cada condición usando un ejemplo cotidiano: **Dos autos que se encuentran de frente en un puente estrecho de un solo carril**[cite: 23].
+Analicemos cada condición usando un ejemplo cotidiano: **Dos autos que se encuentran de frente en un puente estrecho de un solo carril**.
 
-| Condición | Definición Técnica | Ejemplo del Puente (Autos)[cite: 23] |
+| Condición | Definición Técnica | Ejemplo del Puente (Autos) |
 | :--- | :--- | :--- |
-| **1. Exclusión Mutua** | Los recursos no se pueden compartir. Solo un proceso puede usar el recurso a la vez.[cite: 23] | El puente tiene **un solo carril**. No caben dos autos uno al lado del otro. |
-| **2. Retención y Espera** | Un proceso retiene al menos un recurso mientras espera adquirir recursos adicionales que tienen otros.[cite: 23] | El Auto 1 **ocupa su mitad** del puente y **espera** a que el Auto 2 avance para ocupar la otra mitad. |
-| **3. No Apropiación** | El Sistema Operativo no puede "arrebatarle" el recurso a un proceso. El proceso debe liberarlo voluntariamente.[cite: 23] | No hay una grúa mágica que levante a un auto y lo quite del camino a la fuerza. Tienen que retroceder ellos. |
-| **4. Espera Circular** | Existe una cadena cerrada de procesos donde P1 espera a P2, P2 a P3... y el último espera a P1.[cite: 23] | El Auto 1 no avanza porque el Auto 2 está enfrente, y el Auto 2 no avanza porque el Auto 1 está enfrente. |
+| **1. Exclusión Mutua** | Los recursos no se pueden compartir. Solo un proceso puede usar el recurso a la vez. | El puente tiene **un solo carril**. No caben dos autos uno al lado del otro. |
+| **2. Retención y Espera** | Un proceso retiene al menos un recurso mientras espera adquirir recursos adicionales que tienen otros. | El Auto 1 **ocupa su mitad** del puente y **espera** a que el Auto 2 avance para ocupar la otra mitad. |
+| **3. No Apropiación** | El Sistema Operativo no puede "arrebatarle" el recurso a un proceso. El proceso debe liberarlo voluntariamente. | No hay una grúa mágica que levante a un auto y lo quite del camino a la fuerza. Tienen que retroceder ellos. |
+| **4. Espera Circular** | Existe una cadena cerrada de procesos donde P1 espera a P2, P2 a P3... y el último espera a P1. | El Auto 1 no avanza porque el Auto 2 está enfrente, y el Auto 2 no avanza porque el Auto 1 está enfrente. |
 
 ---
 
 ### Ejemplo Real en C: Provocando un Deadlock
 
-El error más común de los programadores es adquirir candados (Mutex) en **orden inverso**[cite: 23]. 
+El error más común de los programadores es adquirir candados (Mutex) en **orden inverso**. 
 Observa este código: El Hilo 1 toma A y luego busca B. El Hilo 2 toma B y luego busca A.
 
 ```c
@@ -77,6 +77,6 @@ Usa el simulador para ejecutar el código de arriba. Luego, ejecuta la solución
 
 ### La Solución: Rompiendo la Espera Circular
 
-¿Cómo arreglamos el código de arriba? Simplemente estableciendo un **orden fijo de adquisición**[cite: 23]. Obligamos a que *todos* los hilos deban pedir primero el Mutex A, y luego el Mutex B. 
+¿Cómo arreglamos el código de arriba? Simplemente estableciendo un **orden fijo de adquisición**. Obligamos a que *todos* los hilos deban pedir primero el Mutex A, y luego el Mutex B. 
 
-Al hacer esto, **rompemos la cuarta condición de Coffman (Espera Circular)**[cite: 23]. Si el Hilo 1 tiene la cerradura A, el Hilo 2 no podrá adquirir nada y se quedará esperando en la línea de salida, dejando los demás recursos libres para que el Hilo 1 termine.
+Al hacer esto, **rompemos la cuarta condición de Coffman (Espera Circular)**. Si el Hilo 1 tiene la cerradura A, el Hilo 2 no podrá adquirir nada y se quedará esperando en la línea de salida, dejando los demás recursos libres para que el Hilo 1 termine.

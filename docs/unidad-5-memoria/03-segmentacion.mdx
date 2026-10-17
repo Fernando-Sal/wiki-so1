@@ -9,7 +9,7 @@ title: Segmentación
 
 Bajo la segmentación, un programa es una colección de segmentos de tamaño variable. Para acceder a un dato, el procesador utiliza una dirección bidimensional: `(segmento, desplazamiento)`.
 
-Para realizar la traducción a memoria física, el Sistema Operativo consulta la **Tabla de Segmentos**. Cada entrada en esta tabla tiene dos atributos[cite: 16]:
+Para realizar la traducción a memoria física, el Sistema Operativo consulta la **Tabla de Segmentos**. Cada entrada en esta tabla tiene dos atributos:
 *   **Base:** La dirección física exacta donde inicia el segmento en la RAM.
 *   **Límite:** El tamaño del segmento. Si el `desplazamiento` solicitado es mayor al límite, se produce un error de acceso (violación de segmento).
 
@@ -19,8 +19,8 @@ Estas dos técnicas resuelven el problema de la memoria no contigua, pero con fi
 
 | Característica | Paginación | Segmentación |
 | :--- | :--- | :--- |
-| **Tamaño de unidad** | Fijo (dictado por el hardware)[cite: 16]. | Variable (dictado por la estructura del programa)[cite: 16]. |
-| **Visibilidad** | Invisible para el programador[cite: 16]. | Visible (el programador es consciente de los segmentos)[cite: 16]. |
-| **Tipo de fragmentación** | Fragmentación Interna[cite: 16]. | Fragmentación Externa[cite: 16]. |
-| **Compartición** | Compleja (se deben compartir múltiples páginas)[cite: 16]. | Sencilla (se puede compartir un segmento entero, ej. librerías)[cite: 16]. |
-| **Protección** | Difícil aislar tipos de datos[cite: 16]. | Excelente (se puede marcar el segmento de código como "solo lectura")[cite: 16]. |
+| **Tamaño de unidad** | Fijo (dictado por el hardware). | Variable (dictado por la estructura del programa). |
+| **Visibilidad** | Invisible para el programador. | Visible (el programador es consciente de los segmentos). |
+| **Tipo de fragmentación** | Fragmentación Interna. | Fragmentación Externa. |
+| **Compartición** | Compleja (se deben compartir múltiples páginas). | Sencilla (se puede compartir un segmento entero, ej. librerías). |
+| **Protección** | Difícil aislar tipos de datos. | Excelente (se puede marcar el segmento de código como "solo lectura"). |

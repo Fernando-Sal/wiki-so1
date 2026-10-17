@@ -11,15 +11,15 @@ import SemaphoreSimulator from '@site/src/components/SemaphoreSimulator';
 
 Inventados por Edsger Dijkstra, los semáforos históricamente usaban las letras holandesas **P** (*Proberen* - probar/esperar) y **V** (*Verhogen* - incrementar).
 
-*   **`wait(S)` o `P(S)`:** Decrementa el valor del semáforo. Si el resultado es menor que 0, el proceso se bloquea y se pone en una cola de espera[cite: 15].
-*   **`signal(S)` o `V(S)`:** Incrementa el valor del semáforo. Si el resultado es menor o igual a 0, significa que había alguien esperando, así que despierta a un proceso de la cola[cite: 15].
+*   **`wait(S)` o `P(S)`:** Decrementa el valor del semáforo. Si el resultado es menor que 0, el proceso se bloquea y se pone en una cola de espera.
+*   **`signal(S)` o `V(S)`:** Incrementa el valor del semáforo. Si el resultado es menor o igual a 0, significa que había alguien esperando, así que despierta a un proceso de la cola.
 
 > **¿Qué significa que el valor sea negativo?**
-> Si un semáforo tiene el valor `-3`, significa que el recurso está ocupado y hay exactamente **3 hilos bloqueados en la cola** esperando su turno[cite: 15].
+> Si un semáforo tiene el valor `-3`, significa que el recurso está ocupado y hay exactamente **3 hilos bloqueados en la cola** esperando su turno.
 
 ### Semáforo Binario vs Semáforo Contador
 
-Existen dos tipos principales[cite: 15]:
+Existen dos tipos principales:
 1.  **Semáforo Binario (Mutex):** Su valor solo puede ser 0 o 1. Sirve para garantizar la exclusión mutua (proteger una sección crítica). Es como la llave de un baño público.
 2.  **Semáforo Contador:** Su valor puede ser cualquier número. Sirve para controlar el acceso a un conjunto de recursos idénticos (ej. 5 impresoras).
 
@@ -29,10 +29,10 @@ Imagina una fábrica de pasteles (Productor) que los pone en un mostrador de 5 e
 * Si el mostrador está lleno, el productor debe detenerse.
 * Si el mostrador está vacío, el consumidor debe detenerse.
 
-Para resolverlo sin condiciones de carrera, usamos tres semáforos[cite: 15]:
+Para resolverlo sin condiciones de carrera, usamos tres semáforos:
 1.  `mutex` (Binario, inicializado en 1): Protege el buffer para que no se modifique al mismo tiempo.
-2.  `vacios` (Contador, inicializado en N): Cuenta cuántos espacios libres quedan[cite: 15].
-3.  `llenos` (Contador, inicializado en 0): Cuenta cuántos elementos hay para consumir[cite: 15].
+2.  `vacios` (Contador, inicializado en N): Cuenta cuántos espacios libres quedan.
+3.  `llenos` (Contador, inicializado en 0): Cuenta cuántos elementos hay para consumir.
 
 #### Ejemplo en Python con `threading.Semaphore`
 
@@ -81,7 +81,7 @@ threading.Thread(target=consumidor).start()
 
 ### Simulador Interactivo (Sprint 2)
 
-Fíjate en cómo funciona la semántica clásica: **un valor negativo representa exactamente el número de procesos bloqueados en la cola de espera**[cite: 16].
+Fíjate en cómo funciona la semántica clásica: **un valor negativo representa exactamente el número de procesos bloqueados en la cola de espera**.
 
 <SemaphoreSimulator />
 
@@ -89,8 +89,8 @@ Fíjate en cómo funciona la semántica clásica: **un valor negativo representa
 
 Para entender a fondo este mecanismo, realiza estas dos pruebas interactivas:
 
-1. **Comportamiento como Mutex (Valor inicial = 1):** Configura el valor en 1 y haz clic en P1. P1 entrará. Luego haz clic en P2. Verás que el valor cae a `-1`, indicando que P2 se bloquea. Esto demuestra la exclusión mutua perfecta[cite: 22].
-2. **Control de Recursos Múltiples (Valor inicial = 3):** Reinicia con valor 3 y haz clic sucesivamente en P1, P2, P3 y P4. Los tres primeros entrarán (`wait()` los deja pasar restando 1 cada vez), pero al hacer clic en P4, el semáforo caerá a `-1` y P4 quedará bloqueado en la cola porque ya no hay recursos libres[cite: 22].
+1. **Comportamiento como Mutex (Valor inicial = 1):** Configura el valor en 1 y haz clic en P1. P1 entrará. Luego haz clic en P2. Verás que el valor cae a `-1`, indicando que P2 se bloquea. Esto demuestra la exclusión mutua perfecta.
+2. **Control de Recursos Múltiples (Valor inicial = 3):** Reinicia con valor 3 y haz clic sucesivamente en P1, P2, P3 y P4. Los tres primeros entrarán (`wait()` los deja pasar restando 1 cada vez), pero al hacer clic en P4, el semáforo caerá a `-1` y P4 quedará bloqueado en la cola porque ya no hay recursos libres.
 
 
-> **Nota técnica sobre React:** Este widget utiliza funciones puras. La función `accion` nunca muta el estado directamente, sino que hace copias con el operador spread (`...p` y `...s.cola`)[cite: 22]. Esto permite que React compare las referencias y redibuje la interfaz correctamente. Además, las transiciones de CSS interpolan colores y tamaños sin necesidad de usar librerías externas de animación[cite: 22].
+> **Nota técnica sobre React:** Este widget utiliza funciones puras. La función `accion` nunca muta el estado directamente, sino que hace copias con el operador spread (`...p` y `...s.cola`). Esto permite que React compare las referencias y redibuje la interfaz correctamente. Además, las transiciones de CSS interpolan colores y tamaños sin necesidad de usar librerías externas de animación.

@@ -9,33 +9,33 @@ import SimuladorHilos from '@site/src/components/SimuladorHilos';
 
 ### ¿Qué se comparte y qué no?
 
-Cuando un proceso decide crear un "hilo" (thread) en lugar de crear un clon de sí mismo, ocurre algo especial[cite: 12]: el nuevo hilo vive dentro del mismo espacio de memoria que su creador.
+Cuando un proceso decide crear un "hilo" (thread) en lugar de crear un clon de sí mismo, ocurre algo especial: el nuevo hilo vive dentro del mismo espacio de memoria que su creador.
 
 **Lo que SÍ comparten todos los hilos del mismo proceso:**
 * **El código (Texto):** Las instrucciones del programa.
-* **Los datos:** Las variables globales. Si un hilo cambia una variable, el otro hilo ve el cambio de inmediato[cite: 12].
+* **Los datos:** Las variables globales. Si un hilo cambia una variable, el otro hilo ve el cambio de inmediato.
 * **Archivos abiertos:** Si el programa abre un archivo de texto, todos los hilos pueden escribir en él.
 
 **Lo que NO comparten (cada hilo tiene el suyo propio):**
-* **Los registros de la CPU:** Porque cada hilo puede estar ejecutando una línea de código diferente en ese milisegundo[cite: 12].
-* **La Pila (Stack):** Sus variables locales temporales y el historial de las funciones que ha llamado[cite: 12].
+* **Los registros de la CPU:** Porque cada hilo puede estar ejecutando una línea de código diferente en ese milisegundo.
+* **La Pila (Stack):** Sus variables locales temporales y el historial de las funciones que ha llamado.
 
 ### Cuadro Comparativo
 
 | Característica | Procesos | Hilos |
 | :--- | :--- | :--- |
-| **Creación** | Muy pesada y lenta (requiere copiar toda la memoria). | Muy ligera y rápida (solo se crea una pila y registros)[cite: 12]. |
-| **Comunicación** | Difícil. Requiere herramientas complejas del SO (tuberías, memoria compartida). | Fácil. Se comunican leyendo y escribiendo las mismas variables globales[cite: 12]. |
-| **Aislamiento** | Alto. Si un proceso falla, no afecta a los demás[cite: 12]. | Nulo. Si un hilo comete un error fatal (como tocar memoria prohibida), todo el proceso muere[cite: 12]. |
-| **Memoria** | Tienen espacios de memoria totalmente separados e independientes[cite: 12]. | Comparten el mismo espacio de memoria (código y datos globales)[cite: 12]. |
-| **Cambio de Contexto** | Costoso. Hay que guardar y cargar mucha información en el PCB[cite: 12]. | Barato y rápido. Solo se guardan los registros y la pila[cite: 12]. |
+| **Creación** | Muy pesada y lenta (requiere copiar toda la memoria). | Muy ligera y rápida (solo se crea una pila y registros). |
+| **Comunicación** | Difícil. Requiere herramientas complejas del SO (tuberías, memoria compartida). | Fácil. Se comunican leyendo y escribiendo las mismas variables globales. |
+| **Aislamiento** | Alto. Si un proceso falla, no afecta a los demás. | Nulo. Si un hilo comete un error fatal (como tocar memoria prohibida), todo el proceso muere. |
+| **Memoria** | Tienen espacios de memoria totalmente separados e independientes. | Comparten el mismo espacio de memoria (código y datos globales). |
+| **Cambio de Contexto** | Costoso. Hay que guardar y cargar mucha información en el PCB. | Barato y rápido. Solo se guardan los registros y la pila. |
 
 ### Contrastando Código en C: `pthread` vs `fork()`
 
 Para entender la diferencia de aislamiento, veamos dos programas intentando hacer lo mismo: sumar dinero a una variable global.
 
 #### 1. Usando Hilos (`pthread_create`)
-*Se compila en Linux usando: `gcc hilos.c -o hilos -pthread`*[cite: 12]
+*Se compila en Linux usando: `gcc hilos.c -o hilos -pthread`*
 
 ```c
 #include <stdio.h>

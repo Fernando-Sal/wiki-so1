@@ -9,30 +9,30 @@ title: Monitores y Paso de Mensajes
 
 Un Monitor es una herramienta de sincronización de alto nivel (propia de lenguajes de programación como Java o C#). 
 
-**¿Cómo funciona?** Encapsula los datos privados y los métodos para modificarlos en una sola "caja" (una clase)[cite: 15]. El monitor garantiza automáticamente la exclusión mutua: **solo un hilo puede estar activo dentro del monitor a la vez**[cite: 15].
+**¿Cómo funciona?** Encapsula los datos privados y los métodos para modificarlos en una sola "caja" (una clase). El monitor garantiza automáticamente la exclusión mutua: **solo un hilo puede estar activo dentro del monitor a la vez**.
 
-Si un hilo está adentro y necesita esperar a que ocurra algo (por ejemplo, que haya espacio en el buffer), usa las **variables de condición** (con operaciones `wait` y `signal` internas) para dormirse y ceder el lugar a otro hilo[cite: 15].
+Si un hilo está adentro y necesita esperar a que ocurra algo (por ejemplo, que haya espacio en el buffer), usa las **variables de condición** (con operaciones `wait` y `signal` internas) para dormirse y ceder el lugar a otro hilo.
 
 ### Comparación: Semáforos vs Monitores
 
 | Característica | Semáforos | Monitores |
 | :--- | :--- | :--- |
-| **Nivel de Abstracción**[cite: 15] | Bajo (Sistema Operativo). | Alto (Lenguaje de Programación)[cite: 15]. |
-| **Exclusión Mutua** | Manual (El programador debe escribir `wait` y `signal` en orden correcto). | Automática (El compilador bloquea la entrada)[cite: 15]. |
-| **Riesgo de Error**[cite: 15] | **Alto**. Olvidar un `signal` provoca un Deadlock inminente[cite: 15]. | **Bajo**. El código es más limpio y a prueba de tontos[cite: 15]. |
+| **Nivel de Abstracción** | Bajo (Sistema Operativo). | Alto (Lenguaje de Programación). |
+| **Exclusión Mutua** | Manual (El programador debe escribir `wait` y `signal` en orden correcto). | Automática (El compilador bloquea la entrada). |
+| **Riesgo de Error** | **Alto**. Olvidar un `signal` provoca un Deadlock inminente. | **Bajo**. El código es más limpio y a prueba de tontos. |
 
 ---
 
 ## Paso de Mensajes (Message Passing)
 
-Cuando los procesos no comparten la misma memoria RAM (por ejemplo, en sistemas distribuidos o redes), no pueden usar semáforos ni monitores. Deben comunicarse mediante Paso de Mensajes usando dos operaciones base: `send(destino, mensaje)` y `receive(origen, mensaje)`[cite: 15].
+Cuando los procesos no comparten la misma memoria RAM (por ejemplo, en sistemas distribuidos o redes), no pueden usar semáforos ni monitores. Deben comunicarse mediante Paso de Mensajes usando dos operaciones base: `send(destino, mensaje)` y `receive(origen, mensaje)`.
 
-*   **Comunicación Directa vs Indirecta:**[cite: 15]
-    *   *Directa:* Se envían mensajes explícitamente a otro proceso (`send(Proceso_B, msj)`)[cite: 15].
-    *   *Indirecta:* Se envían a un buzón o puerto intermedio (`send(Buzon_A, msj)`). Varios procesos pueden leer de ese buzón[cite: 15].
-*   **Síncrona vs Asíncrona (Bloqueo):**[cite: 15]
-    *   *Síncrona (Bloqueante):* El emisor se detiene y espera hasta que el receptor reciba el mensaje (como una llamada telefónica)[cite: 15].
-    *   *Asíncrona (No bloqueante):* El emisor deja el mensaje y sigue haciendo su trabajo (como enviar un correo electrónico)[cite: 15].
+*   **Comunicación Directa vs Indirecta:**
+    *   *Directa:* Se envían mensajes explícitamente a otro proceso (`send(Proceso_B, msj)`).
+    *   *Indirecta:* Se envían a un buzón o puerto intermedio (`send(Buzon_A, msj)`). Varios procesos pueden leer de ese buzón.
+*   **Síncrona vs Asíncrona (Bloqueo):**
+    *   *Síncrona (Bloqueante):* El emisor se detiene y espera hasta que el receptor reciba el mensaje (como una llamada telefónica).
+    *   *Asíncrona (No bloqueante):* El emisor deja el mensaje y sigue haciendo su trabajo (como enviar un correo electrónico).
 
 ### Diagrama de Secuencia: Síncrono vs Asíncrono
 
@@ -64,7 +64,7 @@ sequenceDiagram
 
 ## Cuadro Resumen: Mecanismos de Sincronización
 
-Para cerrar esta unidad, aquí tienes el resumen de las 4 herramientas principales que hemos estudiado[cite: 15]:
+Para cerrar esta unidad, aquí tienes el resumen de las 4 herramientas principales que hemos estudiado:
 
 | Mecanismo | Nivel | ¿Quién lo implementa? | Ventaja Principal | Desventaja / Riesgo |
 | :--- | :--- | :--- | :--- | :--- |
