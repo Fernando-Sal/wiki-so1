@@ -1,19 +1,23 @@
+cd ~/wiki-so1/docs/unidad-5-memoria
+
+cat > 02-paginacion.mdx << 'EOF'
 ---
 sidebar_position: 2
-title: Paginación y Memoria No Contigua
+title: Paginación y Traducción de Direcciones
 ---
 
 import AddressTranslator from '@site/src/components/AddressTranslator';
 
-**Idea central:** Para solucionar el desastre de la fragmentación externa de la asignación contigua, la Paginación permite que un programa se divida y se guarde en pedazos dispersos por toda la RAM[cite: 30].
+**Idea central:** Para solucionar la fragmentación externa de la asignación contigua, la paginación permite dividir un programa y guardarlo en pedazos dispersos por toda la RAM.
 
 Para que esto funcione, se igualan los tamaños:
-*   **Páginas Lógicas:** El código del programa se corta en bloques exactos[cite: 30].
-*   **Marcos Físicos:** La memoria RAM se corta en bloques del mismo tamaño exacto[cite: 30].
 
-### El Proceso de Traducción
+*   **Páginas lógicas:** el código del programa se corta en bloques exactos.
+*   **Marcos físicos:** la memoria RAM se corta en bloques del mismo tamaño exacto.
 
-Cuando la CPU quiere ejecutar una línea de código, no usa la dirección física directamente. Usa una dirección virtual que se divide automáticamente[cite: 30].
+### El proceso de traducción
+
+Cuando la CPU quiere ejecutar una línea de código, no usa la dirección física directamente. Usa una dirección virtual que se divide automáticamente.
 
 ```mermaid
 graph LR
@@ -21,33 +25,50 @@ graph LR
     Div --> |Busca Página en| TP[(Tabla de Páginas)]
     TP --> |Encuentra el| Marco[Marco Físico]
     Marco --> Fis[Dirección Física en RAM:<br/>Marco + Desplazamiento]
-    
+
     classDef db fill:#f39c12,stroke:#d35400,color:#fff;
     class TP db;
 ```
 
-### El Problema: Fragmentación Interna
+### La matemática detrás de la traducción
 
-La paginación elimina por completo la fragmentación *externa*, pero crea un nuevo problema: **fragmentación interna**[cite: 30]. Como la memoria solo se entrega en bloques completos de un tamaño fijo, la última página de un programa casi nunca se llena al 100%[cite: 30].
+Cuando un programa intenta acceder a una dirección de memoria virtual, la Unidad de Gestión de Memoria (MMU) del procesador debe traducirla a una dirección física real en la RAM. Para lograrlo, divide la dirección virtual en dos partes:
+
+1.  **Número de página** = `dirección ÷ tamaño de página` *(división entera)*.
+2.  **Desplazamiento (offset)** = `dirección mod tamaño de página` *(el residuo de la división)*.
+
+Con el número de página, el sistema consulta la **tabla de páginas** del proceso para saber en qué marco físico está guardada esa página. Finalmente calcula la dirección real:
+
+*   **Dirección física** = `marco × tamaño de página + desplazamiento`
+
+> **El fallo de página (page fault):** como la RAM es limitada, no todas las páginas del programa están cargadas a la vez. Si la tabla indica que una página no está en memoria (valor nulo o bit de validez en 0), ocurre un *fallo de página*. El SO debe pausar el programa, ir al disco, traer la página a un marco libre y actualizar la tabla.
+
+### El problema: fragmentación interna
+
+La paginación elimina por completo la fragmentación *externa*, pero crea la **fragmentación interna**. Como la memoria solo se entrega en bloques completos de tamaño fijo, la última página de un programa casi nunca se llena al 100 %.
 
 #### Cálculo de ejemplo
-Imagina un proceso que pesa **7,000 bytes** y el SO usa un tamaño de página de **1,024 bytes**[cite: 30].
-1.  **Páginas requeridas:** 7000 / 1024 = 6.83. El SO no puede dar medias páginas, así que asigna **7 páginas** completas.
-2.  **Memoria total asignada:** 7 páginas × 1024 bytes = **7,168 bytes**.
-3.  **Fragmentación Interna (Desperdicio):** 7168 - 7000 = **168 bytes desperdiciados** en el último marco.
 
----
+Un proceso pesa **7 000 bytes** y el SO usa páginas de **1 024 bytes**:
 
-### La Solución de Velocidad: La TLB
+1.  **Páginas requeridas:** 7000 / 1024 = 6,83. El SO no da medias páginas, así que asigna **7 páginas** completas.
+2.  **Memoria total asignada:** 7 × 1024 = **7 168 bytes**.
+3.  **Fragmentación interna:** 7168 − 7000 = **168 bytes desperdiciados** en el último marco.
 
-Consultar la Tabla de Páginas (que vive en la RAM) para *cada* instrucción del programa es terrible. Significa que para leer una variable, la CPU tendría que hacer **dos accesos a memoria** (uno para leer la tabla y traducir, y otro para leer la variable real)[cite: 30]. ¡Esto haría que la computadora fuera un 50% más lenta!
+### La solución de velocidad: la TLB
 
-Para evitarlo, los procesadores incluyen una **TLB (Translation Lookaside Buffer)**[cite: 30]. Es una memoria caché ultrarrápida dentro de la CPU que guarda las traducciones más recientes. Si la traducción está en la TLB (Acierto de TLB), el cálculo es instantáneo y nos ahorramos el doble acceso a la RAM[cite: 30].
+Consultar la tabla de páginas (que vive en la RAM) en *cada* instrucción es muy costoso: para leer una variable, la CPU haría **dos accesos a memoria**, uno para leer la tabla y traducir, y otro para leer el dato real. Cada acceso tardaría el doble.
 
----
+Para evitarlo, los procesadores incluyen una **TLB (Translation Lookaside Buffer)**, una caché ultrarrápida dentro de la CPU que guarda las traducciones más recientes. Si la traducción está en la TLB (acierto de TLB), se evita el doble acceso a la RAM.
 
-### Calculadora de Traducción MMU (Sprint 3)
+### Calculadora interactiva de traducción
 
-Interactúa con el widget matemático. Recuerda que si el valor del marco está en blanco en la tabla, el traductor reportará un fallo de página[cite: 30].
+Usa esta herramienta para simular el trabajo de la MMU. Puedes cambiar la dirección virtual, elegir el tamaño de página y modificar los marcos de la tabla en tiempo real. Si dejas un marco en blanco, el traductor reportará un fallo de página.
 
 <AddressTranslator />
+
+### Puntos clave
+
+*   El tamaño de página siempre es una potencia de 2 (1024, 4096...) porque permite usar operaciones binarias de corrimiento (*bit shifting*) en lugar de divisiones, haciendo la traducción muy rápida.
+*   En el widget, si borras el número de marco de la página activa, simulas cómo el procesador se topa con un espacio vacío y lanza un fallo de página.
+EOF

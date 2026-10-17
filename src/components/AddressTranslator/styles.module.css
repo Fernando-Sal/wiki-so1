@@ -1,0 +1,15 @@
+.contenedor {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  padding: 1rem;
+  background: var(--ifm-background-surface-color);
+  margin: 1.5rem 0;
+}
+.controles { display: flex; flex-wrap: wrap; gap: 1rem; }
+.controles input { width: 8rem; }
+.ayuda { font-size: 0.85rem; opacity: 0.75; margin-top: 10px; }
+.tabla { display: table; width: auto; min-width: 12rem; margin-top: 15px;}
+.tabla input { width: 5rem; }
+.activa { background: rgba(40, 167, 69, 0.2); }
+.resultado { margin-top: 1rem; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px;}
+.error { color: var(--ifm-color-danger); }
