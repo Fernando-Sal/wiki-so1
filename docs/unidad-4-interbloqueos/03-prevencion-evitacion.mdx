@@ -1,0 +1,41 @@
+---
+sidebar_position: 3
+title: Prevención, Evitación y el Avestruz
+---
+
+**Idea central:** Ante el problema de los interbloqueos, los diseñadores de Sistemas Operativos tienen tres filosofías principales: atacarlo antes de que nazca, esquivarlo en tiempo real, o simplemente... ignorarlo.
+
+### 1. Prevención, Evitación y Detección
+
+Es vital no confundir estos tres términos técnicos, ya que operan en momentos distintos de la vida del sistema:
+
+*   **Prevención:** Es actuar *antes* de que el programa corra. Significa diseñar el Sistema Operativo para que matemáticamente sea imposible que se cumplan las 4 condiciones de Coffman. Si rompes una, rompes el deadlock.
+*   **Evitación:** Es actuar *durante* la ejecución. El sistema operativo analiza cada petición de recursos en tiempo real. Si nota que dar un recurso podría llevar a un deadlock futuro, deniega la petición temporalmente[cite: 24].
+*   **Detección y Recuperación:** Dejar que el deadlock ocurra. El sistema escanea periódicamente los grafos RAG buscando ciclos. Si encuentra uno, "mata" a un proceso o le arrebata recursos a la fuerza para destrabar al resto[cite: 24].
+
+### Cuadro Comparativo: Prevención (Atacando a Coffman)
+
+Si queremos **prevenir**, debemos invalidar al menos una condición. Aquí vemos cómo se hace y por qué casi nadie lo usa en la práctica[cite: 24].
+
+| Condición a Romper | Estrategia de Ataque | Desventaja / Costo Real |
+| :--- | :--- | :--- |
+| **Exclusión Mutua** | Hacer que todos los recursos sean compartidos (ej. un *spooler* de impresión que encola trabajos). | **Imposible para todo:** Hay recursos físicos (como escribir en una tabla de base de datos) que no pueden compartirse sin corromper datos. |
+| **Retención y Espera** | Obligar al proceso a pedir *todos* sus recursos al inicio. Si no están todos, no arranca[cite: 24]. | **Desperdicio (Baja utilización):** Un proceso acapara la impresora por horas aunque solo la use al final[cite: 24]. Provoca inanición. |
+| **No Apropiación** | Permitir que el Sistema Operativo le robe recursos a un proceso pausado para dárselos a otro. | **Corrupción:** Imagina arrebatarle el disco duro a un proceso a mitad de guardado. Se corrompe el archivo. |
+| **Espera Circular** | Asignar un orden numérico fijo a todos los recursos. Solo se pueden pedir en orden ascendente (1, 2, 3...). | **Rigidez:** Limita severamente cómo el programador puede escribir su código y hacer peticiones. |
+
+---
+
+### El Algoritmo del Avestruz (¿Qué hacen Linux y Windows?)
+
+A pesar de toda esta teoría matemática, ¿qué hacen sistemas modernos como Windows, Linux o macOS frente a los interbloqueos? **Hacen como el avestruz: esconden la cabeza en la arena e ignoran el problema**[cite: 24].
+
+**¿Por qué lo adoptan?** Es un simple análisis de costo-beneficio[cite: 24]. Prevenir o evitar deadlocks consume muchísimo procesador y memoria (los algoritmos deben correr en cada milisegundo). Como los interbloqueos son relativamente raros en computadoras personales (ocurren quizás una vez al mes), es más barato dejar que la computadora se congele y obligar al usuario a reiniciar o forzar el cierre, que hacer la computadora un 20% más lenta todos los días para prevenirlo[cite: 24].
+
+#### Ventajas y Desventajas del Avestruz
+
+| Ventajas | Desventajas |
+| :--- | :--- |
+| Máximo rendimiento del sistema (cero sobrecarga)[cite: 24]. | Riesgo de pérdida total de datos no guardados[cite: 24]. |
+| Código del kernel más simple y fácil de mantener. | Frustración del usuario al experimentar congelamientos. |
+| Altamente eficiente para PC de escritorio. | **Inaceptable** en sistemas críticos (pilotos automáticos, bases de datos bancarias)[cite: 24]. |

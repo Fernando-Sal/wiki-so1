@@ -1,0 +1,82 @@
+---
+sidebar_position: 1
+title: Condiciones de Coffman
+---
+
+import SimuladorDeadlock from '@site/src/components/SimuladorDeadlock';
+
+**Idea central:** Un interbloqueo (Deadlock) es una situación donde un conjunto de procesos se quedan bloqueados permanentemente porque cada uno tiene un recurso que el otro necesita, y ninguno está dispuesto a soltarlo.
+
+### Las 4 Condiciones Simultáneas de Coffman
+
+Para que ocurra un interbloqueo, Edward G. Coffman demostró que **deben cumplirse estas cuatro condiciones al mismo tiempo**[cite: 23]. Si logramos romper al menos una, el deadlock es imposible.
+
+Analicemos cada condición usando un ejemplo cotidiano: **Dos autos que se encuentran de frente en un puente estrecho de un solo carril**[cite: 23].
+
+| Condición | Definición Técnica | Ejemplo del Puente (Autos)[cite: 23] |
+| :--- | :--- | :--- |
+| **1. Exclusión Mutua** | Los recursos no se pueden compartir. Solo un proceso puede usar el recurso a la vez.[cite: 23] | El puente tiene **un solo carril**. No caben dos autos uno al lado del otro. |
+| **2. Retención y Espera** | Un proceso retiene al menos un recurso mientras espera adquirir recursos adicionales que tienen otros.[cite: 23] | El Auto 1 **ocupa su mitad** del puente y **espera** a que el Auto 2 avance para ocupar la otra mitad. |
+| **3. No Apropiación** | El Sistema Operativo no puede "arrebatarle" el recurso a un proceso. El proceso debe liberarlo voluntariamente.[cite: 23] | No hay una grúa mágica que levante a un auto y lo quite del camino a la fuerza. Tienen que retroceder ellos. |
+| **4. Espera Circular** | Existe una cadena cerrada de procesos donde P1 espera a P2, P2 a P3... y el último espera a P1.[cite: 23] | El Auto 1 no avanza porque el Auto 2 está enfrente, y el Auto 2 no avanza porque el Auto 1 está enfrente. |
+
+---
+
+### Ejemplo Real en C: Provocando un Deadlock
+
+El error más común de los programadores es adquirir candados (Mutex) en **orden inverso**[cite: 23]. 
+Observa este código: El Hilo 1 toma A y luego busca B. El Hilo 2 toma B y luego busca A.
+
+```c
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+
+pthread_mutex_t mutex_A = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mutex_B = PTHREAD_MUTEX_INITIALIZER;
+
+void* hilo_1(void* arg) {
+    pthread_mutex_lock(&mutex_A);
+    sleep(1); // Simulamos procesamiento para asegurar que el Hilo 2 arranque
+    pthread_mutex_lock(&mutex_B); // ¡Se congela aquí esperando B!
+    
+    // ... trabajo ...
+    
+    pthread_mutex_unlock(&mutex_B);
+    pthread_mutex_unlock(&mutex_A);
+    return NULL;
+}
+
+void* hilo_2(void* arg) {
+    pthread_mutex_lock(&mutex_B);
+    sleep(1);
+    pthread_mutex_lock(&mutex_A); // ¡Se congela aquí esperando A!
+    
+    // ... trabajo ...
+    
+    pthread_mutex_unlock(&mutex_A);
+    pthread_mutex_unlock(&mutex_B);
+    return NULL;
+}
+
+int main() {
+    pthread_t t1, t2;
+    pthread_create(&t1, NULL, hilo_1, NULL);
+    pthread_create(&t2, NULL, hilo_2, NULL);
+    pthread_join(t1, NULL); // El programa nunca pasará de aquí
+    pthread_join(t2, NULL);
+    return 0;
+}
+```
+
+### Ejecución en Vivo: El Congelamiento
+
+Usa el simulador para ejecutar el código de arriba. Luego, ejecuta la solución.
+
+<SimuladorDeadlock />
+
+### La Solución: Rompiendo la Espera Circular
+
+¿Cómo arreglamos el código de arriba? Simplemente estableciendo un **orden fijo de adquisición**[cite: 23]. Obligamos a que *todos* los hilos deban pedir primero el Mutex A, y luego el Mutex B. 
+
+Al hacer esto, **rompemos la cuarta condición de Coffman (Espera Circular)**[cite: 23]. Si el Hilo 1 tiene la cerradura A, el Hilo 2 no podrá adquirir nada y se quedará esperando en la línea de salida, dejando los demás recursos libres para que el Hilo 1 termine.

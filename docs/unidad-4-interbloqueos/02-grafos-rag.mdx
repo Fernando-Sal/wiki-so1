@@ -1,0 +1,80 @@
+---
+sidebar_position: 2
+title: Grafos de Asignación de Recursos (RAG)
+---
+
+**Idea central:** Para detectar un interbloqueo matemáticamente antes de que congele el sistema, los Sistemas Operativos utilizan los Grafos de Asignación de Recursos (RAG, por sus siglas en inglés).
+
+### Notación del Grafo
+
+Un RAG es un mapa visual que muestra quién tiene qué, y quién está esperando qué. Utiliza una notación estandarizada[cite: 23]:
+
+*   **Procesos (Círculos):** Representan a los hilos o programas en ejecución[cite: 23].
+*   **Recursos (Rectángulos):** Representan impresoras, memoria, archivos, o mutex[cite: 23]. Un recurso puede tener varios "puntitos" adentro si tiene múltiples instancias (ej. 3 impresoras idénticas).
+*   **Arista de Asignación (Recurso ➔ Proceso):** Una flecha que sale del rectángulo hacia el círculo significa *"El recurso está actualmente en uso por este proceso"*.[cite: 23]
+*   **Arista de Solicitud (Proceso ➔ Recurso):** Una flecha que sale del círculo hacia el rectángulo significa *"El proceso necesita este recurso y está esperando en la cola"*.[cite: 23]
+
+---
+
+### La Regla Clave de los Ciclos
+
+Para saber si hay un interbloqueo mirando un grafo, debes buscar si las flechas forman un círculo cerrado (un ciclo). La regla matemática es[cite: 23]:
+
+1.  **Ciclo con 1 instancia por recurso ➔ IMPLICA Interbloqueo seguro.** Si todos los recursos son únicos (como un Mutex), un ciclo es garantía 100% de que el sistema está muerto.[cite: 23]
+2.  **Ciclo con varias instancias ➔ NECESARIO pero NO suficiente.** Si hay recursos con múltiples instancias, encontrar un ciclo es una señal de alarma, pero puede que no haya deadlock si un proceso ajeno al ciclo libera una instancia a tiempo.[cite: 23]
+
+---
+
+### Diagramas de Contraste (Mermaid)
+
+Veamos la diferencia visual entre un sistema sano y uno colapsado usando diagramas de flujo[cite: 23].
+
+#### 1. Sistema SANO (Sin Ciclos)
+
+El Proceso 1 tiene el Recurso A. El Proceso 2 está esperando el Recurso A, pero ya tiene el Recurso B. Todo fluye, el Proceso 1 terminará eventualmente y liberará A.
+
+```mermaid
+graph TD
+    classDef proceso fill:#3498db,stroke:#2980b9,stroke-width:2px,color:#fff,shape:circle;
+    classDef recurso fill:#2ecc71,stroke:#27ae60,stroke-width:2px,color:#fff;
+
+    P1((Proceso 1)):::proceso
+    P2((Proceso 2)):::proceso
+    
+    RA[Recurso A]:::recurso
+    RB[Recurso B]:::recurso
+
+    %% Asignaciones
+    RA -- Asignado a --> P1
+    RB -- Asignado a --> P2
+
+    %% Solicitudes
+    P2 -- Solicita --> RA
+```
+
+#### 2. Sistema EN DEADLOCK (Ciclo detectado)
+
+Aquí vemos el problema del código en C de la página anterior. Se forma un ciclo cerrado infinito: `P1 -> RB -> P2 -> RA -> P1`. Como los recursos tienen una sola instancia, esto es un interbloqueo irrecuperable[cite: 23].
+
+```mermaid
+graph TD
+    classDef proceso fill:#e74c3c,stroke:#c0392b,stroke-width:2px,color:#fff,shape:circle;
+    classDef recurso fill:#f1c40f,stroke:#f39c12,stroke-width:2px,color:#000;
+
+    P1((Proceso 1)):::proceso
+    P2((Proceso 2)):::proceso
+    
+    RA[Recurso A]:::recurso
+    RB[Recurso B]:::recurso
+
+    %% Asignaciones (Flecha del recurso al proceso)
+    RA -- Asignado a --> P1
+    RB -- Asignado a --> P2
+
+    %% Solicitudes (Flecha del proceso al recurso)
+    P1 -- Solicita --> RB
+    P2 -- Solicita --> RA
+    
+    linkStyle 2,3 stroke:#e74c3c,stroke-width:3px,stroke-dasharray: 5 5;
+```
+*(Las flechas punteadas rojas muestran el momento en que se cierra el ciclo fatal).*
