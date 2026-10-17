@@ -1,0 +1,26 @@
+---
+sidebar_position: 3
+title: Segmentación
+---
+
+**Idea central:** Mientras que la paginación divide la memoria en bloques fijos matemáticos, la **segmentación** respeta la visión lógica del programador dividiendo la memoria en las partes naturales del programa: código, datos y pila.
+
+### Visión del Programador y Traducción
+
+Bajo la segmentación, un programa es una colección de segmentos de tamaño variable. Para acceder a un dato, el procesador utiliza una dirección bidimensional: `(segmento, desplazamiento)`.
+
+Para realizar la traducción a memoria física, el Sistema Operativo consulta la **Tabla de Segmentos**. Cada entrada en esta tabla tiene dos atributos[cite: 16]:
+*   **Base:** La dirección física exacta donde inicia el segmento en la RAM.
+*   **Límite:** El tamaño del segmento. Si el `desplazamiento` solicitado es mayor al límite, se produce un error de acceso (violación de segmento).
+
+### Cuadro Comparativo: Paginación vs. Segmentación
+
+Estas dos técnicas resuelven el problema de la memoria no contigua, pero con filosofías distintas.
+
+| Característica | Paginación | Segmentación |
+| :--- | :--- | :--- |
+| **Tamaño de unidad** | Fijo (dictado por el hardware)[cite: 16]. | Variable (dictado por la estructura del programa)[cite: 16]. |
+| **Visibilidad** | Invisible para el programador[cite: 16]. | Visible (el programador es consciente de los segmentos)[cite: 16]. |
+| **Tipo de fragmentación** | Fragmentación Interna[cite: 16]. | Fragmentación Externa[cite: 16]. |
+| **Compartición** | Compleja (se deben compartir múltiples páginas)[cite: 16]. | Sencilla (se puede compartir un segmento entero, ej. librerías)[cite: 16]. |
+| **Protección** | Difícil aislar tipos de datos[cite: 16]. | Excelente (se puede marcar el segmento de código como "solo lectura")[cite: 16]. |

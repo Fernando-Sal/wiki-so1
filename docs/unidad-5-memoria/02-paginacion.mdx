@@ -1,0 +1,53 @@
+---
+sidebar_position: 2
+title: Paginación y Memoria No Contigua
+---
+
+import AddressTranslator from '@site/src/components/AddressTranslator';
+
+**Idea central:** Para solucionar el desastre de la fragmentación externa de la asignación contigua, la Paginación permite que un programa se divida y se guarde en pedazos dispersos por toda la RAM[cite: 30].
+
+Para que esto funcione, se igualan los tamaños:
+*   **Páginas Lógicas:** El código del programa se corta en bloques exactos[cite: 30].
+*   **Marcos Físicos:** La memoria RAM se corta en bloques del mismo tamaño exacto[cite: 30].
+
+### El Proceso de Traducción
+
+Cuando la CPU quiere ejecutar una línea de código, no usa la dirección física directamente. Usa una dirección virtual que se divide automáticamente[cite: 30].
+
+```mermaid
+graph LR
+    Dir[Dirección Lógica<br/>de la CPU] -->|Se divide en| Div["Página | Desplazamiento"]
+    Div --> |Busca Página en| TP[(Tabla de Páginas)]
+    TP --> |Encuentra el| Marco[Marco Físico]
+    Marco --> Fis[Dirección Física en RAM:<br/>Marco + Desplazamiento]
+    
+    classDef db fill:#f39c12,stroke:#d35400,color:#fff;
+    class TP db;
+```
+
+### El Problema: Fragmentación Interna
+
+La paginación elimina por completo la fragmentación *externa*, pero crea un nuevo problema: **fragmentación interna**[cite: 30]. Como la memoria solo se entrega en bloques completos de un tamaño fijo, la última página de un programa casi nunca se llena al 100%[cite: 30].
+
+#### Cálculo de ejemplo
+Imagina un proceso que pesa **7,000 bytes** y el SO usa un tamaño de página de **1,024 bytes**[cite: 30].
+1.  **Páginas requeridas:** 7000 / 1024 = 6.83. El SO no puede dar medias páginas, así que asigna **7 páginas** completas.
+2.  **Memoria total asignada:** 7 páginas × 1024 bytes = **7,168 bytes**.
+3.  **Fragmentación Interna (Desperdicio):** 7168 - 7000 = **168 bytes desperdiciados** en el último marco.
+
+---
+
+### La Solución de Velocidad: La TLB
+
+Consultar la Tabla de Páginas (que vive en la RAM) para *cada* instrucción del programa es terrible. Significa que para leer una variable, la CPU tendría que hacer **dos accesos a memoria** (uno para leer la tabla y traducir, y otro para leer la variable real)[cite: 30]. ¡Esto haría que la computadora fuera un 50% más lenta!
+
+Para evitarlo, los procesadores incluyen una **TLB (Translation Lookaside Buffer)**[cite: 30]. Es una memoria caché ultrarrápida dentro de la CPU que guarda las traducciones más recientes. Si la traducción está en la TLB (Acierto de TLB), el cálculo es instantáneo y nos ahorramos el doble acceso a la RAM[cite: 30].
+
+---
+
+### Calculadora de Traducción MMU (Sprint 3)
+
+Interactúa con el widget matemático. Recuerda que si el valor del marco está en blanco en la tabla, el traductor reportará un fallo de página[cite: 30].
+
+<AddressTranslator />

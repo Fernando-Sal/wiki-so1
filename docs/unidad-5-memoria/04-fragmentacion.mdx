@@ -1,0 +1,25 @@
+---
+sidebar_position: 4
+title: Resumen de Fragmentación
+---
+
+**Idea central:** La fragmentación es el desperdicio inevitable de memoria que ocurre al cargar y descargar programas con el paso del tiempo.
+
+### Interna vs Externa
+
+Existen dos escenarios principales en los que el Sistema Operativo pierde espacio útil[cite: 16]:
+
+1.  **Fragmentación Interna:** Es el espacio que se desperdicia *dentro* de un bloque de memoria ya asignado a un proceso[cite: 16]. Ocurre cuando el bloque otorgado es ligeramente más grande de lo que el programa necesita.
+2.  **Fragmentación Externa:** Ocurre cuando existe suficiente memoria total libre para satisfacer una solicitud, pero esta memoria está *dispersa* en pequeños huecos separados[cite: 16].
+
+### Técnicas y Mitigación
+
+¿Qué técnica sufre de cuál fragmentación y cómo la repara el SO?[cite: 16]
+
+| Técnica / Algoritmo | Sufre principalmente de... | Mitigación |
+| :--- | :--- | :--- |
+| **Particiones Variables** | Externa | **Compactación:** El SO pausa los procesos y mueve los bloques en uso juntos para fusionar todos los huecos libres en uno solo[cite: 16]. Consume muchísimo CPU. |
+| **Paginación** | Interna | Mantener el tamaño de página pequeño (ej. 4 KB) para que el desperdicio de la última página sea insignificante. |
+| **Segmentación** | Externa | Usar Paginación combinada (Sistemas Paginados-Segmentados). |
+
+> **Nota Técnica MDX:** Cuidado con los símbolos matemáticos. Si utilizas el operador de "menor qué" (`` `<` ``) en medio de un párrafo normal, el compilador de Docusaurus lo confundirá con una etiqueta HTML y romperá la página[cite: 16]. Siempre escríbelo entre comillas invertidas o dentro de bloques de código[cite: 16].
